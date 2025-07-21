@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace TWPublicDemoApi.Controllers
 {
@@ -21,6 +23,16 @@ namespace TWPublicDemoApi.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] retVal = md5.ComputeHash(Encoding.Unicode.GetBytes("TextToHash"));
+                StringBuilder StrBuilder = new StringBuilder();
+                for (int i = 0; i < retVal.Length; i++)
+                {
+                    StrBuilder.Append(retVal[i].ToString("x2"));
+                }
+            }
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
